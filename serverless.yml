@@ -25,17 +25,19 @@ provider:
         - dynamodb:DeleteItem
       Resource: "arn:aws:dynamodb:*:*:*"
   environment:
-    TABLE_NAME_USER: users-${opt:stage, self:provider.stage}
+    TABLE_NAME_USER: user-${opt:stage, self:provider.stage}
 
 package:
   exclude:
-    - ./**
+    - ./test_data/**
+    - ./api/**
+    - ./go/**
   include:
-    - ./bin/**
+    - ./bin/users/**
 
 functions:
   usersCreate:
-    handler: bin/users/create.zip
+    handler: bin/users/create
     events:
       - httpApi:
           path: /users/create

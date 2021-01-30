@@ -1,4 +1,4 @@
-package users
+package main
 
 import (
 	"encoding/json"
@@ -11,8 +11,8 @@ import (
 )
 
 type User struct {
-	id string `json:"id"`
-	email string `json:"email"`
+	Id    string `json:"id"`
+	Email string `json:"email"`
 }
 
 func Create(body string) (User, error)  {
@@ -20,7 +20,8 @@ func Create(body string) (User, error)  {
 	svc := dynamodb.New(sess)
 
 	var thisUser User
-	_ = json.Unmarshal([]byte(body), &thisUser)
+
+	json.Unmarshal([]byte(body), &thisUser)
 
 	av, err := dynamodbattribute.MarshalMap(thisUser)
 	if err != nil {
@@ -32,7 +33,9 @@ func Create(body string) (User, error)  {
 		Item: av,
 		TableName: aws.String(os.Getenv("TABLE_NAME_USER")),
 	}
+
 	_, err = svc.PutItem(input)
+
 	return thisUser, err
 }
 

@@ -23,3 +23,5 @@ vendor
 .idea/
 
 go/
+
+.DS_Store
