@@ -1,4 +1,4 @@
-package main
+package users
 
 import (
 	"github.com/byunjuneseok/hiupt/api"

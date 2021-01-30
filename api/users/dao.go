@@ -1,4 +1,4 @@
-package main
+package users
 
 import (
 	"encoding/json"
@@ -21,7 +21,7 @@ func Create(body string) (User, error)  {
 
 	var thisUser User
 
-	json.Unmarshal([]byte(body), &thisUser)
+	_ = json.Unmarshal([]byte(body), &thisUser)
 
 	av, err := dynamodbattribute.MarshalMap(thisUser)
 	if err != nil {
