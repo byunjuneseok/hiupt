@@ -1,8 +1,6 @@
 package users
 
 import (
-	"github.com/byunjuneseok/hiupt/api"
-
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 )
@@ -10,7 +8,7 @@ import (
 
 func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	//Logger(request.Body)
-	_, err := Post(request.Body)
+	_, err := Create(request.Body)
 	if err != nil {
 		return events.APIGatewayProxyResponse{
 			Body: "Error",

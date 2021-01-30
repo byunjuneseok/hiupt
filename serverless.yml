@@ -34,8 +34,8 @@ package:
     - ./bin/**
 
 functions:
-  hello:
-    handler: bin/users/challenge
+  usersCreate:
+    handler: bin/users/create.zip
     events:
       - httpApi:
           path: /users/create
@@ -43,15 +43,15 @@ functions:
 
 resources:
   Resources:
-    usersTable:
+    userTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: users-${opt:stage, self:provider.stage}
+        TableName: user-${opt:stage, self:provider.stage}
         KeySchema:
           - AttributeName: id
-            AttributeType: S
+            KeyType: HASH
         AttributeDefinitions:
-          - AttributeName: email
+          - AttributeName: id
             AttributeType: S
         ProvisionedThroughput:
           ReadCapacityUnits: 1
