@@ -21,3 +21,5 @@ vendor
 *.out
 
 .idea/
+
+go/
