@@ -1,7 +1,9 @@
+.PHONY: clean
+
 go_apps = users/create users/retrieve
 
-users/% : api/users/%.go api/users/dao.go
-	env GOOS=linux go build -ldflags="-s -w" -o bin/$@ $< api/users/dao.go
+users/% : src/users/%.go src/users/dao.go
+	GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o bin/$@ $< src/users/dao.go
 
 clean:
 	rm -rf ./bin

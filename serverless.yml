@@ -29,20 +29,21 @@ provider:
 
 package:
   exclude:
-    - ./test_data/**
+    - ./**
+    - ./api/**
     - ./api/**
     - ./go/**
   include:
     - ./bin/users/**
 
 functions:
-  usersCreate:
+  userCreate:
     handler: bin/users/create
     events:
       - httpApi:
           path: /users/create
           method: post
-  usersRetrieve:
+  userRetrieve:
     handler: bin/users/retrieve
     events:
       - httpApi:
