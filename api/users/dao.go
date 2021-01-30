@@ -15,6 +15,13 @@ type User struct {
 	Email string `json:"email"`
 }
 
+func Retrieve(body string) (User, error) {
+	//sess := session.Must(session.NewSession())
+	//svc := dynamodb.New(sess)
+
+	return User{}, nil
+}
+
 func Create(body string) (User, error)  {
 	sess := session.Must(session.NewSession())
 	svc := dynamodb.New(sess)
@@ -39,18 +46,3 @@ func Create(body string) (User, error)  {
 	return thisUser, err
 }
 
-//func List(body string) ([]User, error) {
-//	sess := session.Must(session.NewSession())
-//	svc := dynamodb.New(sess)
-//
-//	var users []User
-//
-//	result, err := svc.Scan()
-//	if err != nil {
-//		fmt.Println(err.Error())
-//		return users, err
-//	}
-//
-//	err = dynamodbattribute.UnmarshalListOfMaps()
-//
-//}

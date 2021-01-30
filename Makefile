@@ -1,9 +1,12 @@
-.PHONY: build clean deploy
+go_apps = users/create users/retrieve
 
-build:
-	env GOOS=linux go build -ldflags="-s -w" -o bin/users/create ./api/users
+users/% : api/users/%.go api/users/dao.go
+	env GOOS=linux go build -ldflags="-s -w" -o bin/$@ $< api/users/dao.go
+
 clean:
 	rm -rf ./bin
 
-deploy: clean build
-	sls deploy --verbose
+build: $(go_apps)
+
+#deploy: clean build
+#	sls deploy --verbose

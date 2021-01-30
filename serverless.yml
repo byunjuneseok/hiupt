@@ -42,6 +42,12 @@ functions:
       - httpApi:
           path: /users/create
           method: post
+  usersRetrieve:
+    handler: bin/users/retrieve
+    events:
+      - httpApi:
+          path: /users/{id}
+          method: get
 
 resources:
   Resources:
