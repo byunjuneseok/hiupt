@@ -12,7 +12,7 @@ import (
 
 func userRetrieveHandler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error)  {
 	log.Logger(request.Body)
-	user, err := users.Retrieve(request.PathParameters["id"])
+	user, err := users.RetrieveByStudentId(request.PathParameters["id"])
 	if err != nil {
 		return events.APIGatewayProxyResponse{Body: err.Error(), StatusCode: 500}, err
 	}

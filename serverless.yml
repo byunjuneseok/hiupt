@@ -75,8 +75,12 @@ resources:
         KeySchema:
           - AttributeName: id
             KeyType: HASH
+          - AttributeName: studentId
+            KeyType: RANGE
         AttributeDefinitions:
           - AttributeName: id
+            AttributeType: S
+          - AttributeName: studentId
             AttributeType: S
         ProvisionedThroughput:
           ReadCapacityUnits: 1

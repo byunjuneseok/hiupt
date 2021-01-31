@@ -18,7 +18,7 @@ func challengeHandler(request events.APIGatewayProxyRequest) (events.APIGatewayP
 	thisUserId := tmpUser.Id
 
 	// validate userId.
-	thisUser, err := users.Retrieve(thisUserId)
+	thisUser, err := users.RetrieveByStudentId(thisUserId)
 	if err != nil {
 		return events.APIGatewayProxyResponse{Body: err.Error(), StatusCode: 500}, err
 	}

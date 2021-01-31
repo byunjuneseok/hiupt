@@ -1,19 +1,17 @@
 package users
 
 import (
+	"encoding/json"
+	"fmt"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
-
-
-	"encoding/json"
-	"fmt"
 	"os"
 )
 
 
-func Retrieve(id string) (User, error) {
+func RetrieveByStudentId(id string) (User, error) {
 	sess := session.Must(session.NewSession())
 	svc := dynamodb.New(sess)
 	user := User{}
@@ -21,7 +19,7 @@ func Retrieve(id string) (User, error) {
 	result, err := svc.GetItem(&dynamodb.GetItemInput{
 		TableName: aws.String(os.Getenv("TABLE_NAME_USER")),
 		Key: map[string]*dynamodb.AttributeValue{
-			"id": {
+			"StudentId": {
 				S: aws.String(id),
 			},
 		},
@@ -59,6 +57,10 @@ func Create(body string) (User, error)  {
 	var thisUser User
 
 	_ = json.Unmarshal([]byte(body), &thisUser)
+	err := thisUser.setId()
+	if err != nil {
+		return User{}, err
+	}
 
 	av, err := dynamodbattribute.MarshalMap(thisUser)
 	if err != nil {
