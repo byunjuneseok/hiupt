@@ -27,7 +27,7 @@ provider:
       Action:
         - sqs:DeleteMessage
         - sqs:ReceiveMessage
-      Resource: arn:aws:sqs:*:*:${self:custom.sqs}
+      Resource: "arn:aws:sqs:*:*:*"
 
   environment:
     TABLE_NAME_USER: hiupt-user-${opt:stage, self:provider.stage}
@@ -38,26 +38,31 @@ provider:
 
 package:
   exclude:
-    - ./**
-    - ./api/**
-    - ./api/**
+    - ./src/**
     - ./go/**
+    - ./node_modules/**
   include:
-    - ./bin/users/**
+    - ./bin/lambda/**
 
 functions:
   userCreate:
-    handler: bin/lambda/create
+    handler: bin/lambda/users/create
     events:
       - httpApi:
           path: /users/create
           method: post
   userRetrieve:
-    handler: bin/lambda/retrieve
+    handler: bin/lambda/users/retrieve
     events:
       - httpApi:
           path: /users/{id}
           method: get
+  authChallenge:
+    handler: bin/lambda/auth/challenge
+    events:
+      - httpApi:
+          path: /auth/challenge/{id}
+          method: post
 
 resources:
   Resources:
@@ -114,7 +119,7 @@ resources:
         RedrivePolicy:
           deadLetterTargetArn:
             Fn::GetAtt:
-              - MessagesDeadLetterQueue
+              - authChallengeEmailDeadLetterQueue
               - Arn
           maxReceiveCount: 10
 

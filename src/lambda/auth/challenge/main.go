@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -12,7 +13,9 @@ import (
 func challengeHandler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 
 	// before processing request, get userId.
-	thisUserId := "B211103"
+	var tmpUser users.User
+	_ = json.Unmarshal([]byte(request.Body), &tmpUser)
+	thisUserId := tmpUser.Id
 
 	// validate userId.
 	thisUser, err := users.Retrieve(thisUserId)
