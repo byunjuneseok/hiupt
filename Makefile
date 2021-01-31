@@ -12,5 +12,5 @@ build:
 clean:
 	rm -rf ./bin
 
-#deploy: clean build
-#	sls deploy --verbose
+dv: clean build
+	sls deploy --verbose
