@@ -3,13 +3,15 @@ package main
 import (
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
+
 	"github.com/byunjuneseok/hiupt/src/log"
+	"github.com/byunjuneseok/hiupt/src/users"
 )
 
-func createHandler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+func userCreateHandler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	log.Logger(request.Body)
 
-	_, err := Create(request.Body)
+	_, err := users.Create(request.Body)
 
 	if err != nil {
 		return events.APIGatewayProxyResponse{
@@ -25,5 +27,5 @@ func createHandler(request events.APIGatewayProxyRequest) (events.APIGatewayProx
 }
 
 func main()  {
-	lambda.Start(createHandler)
+	lambda.Start(userCreateHandler)
 }

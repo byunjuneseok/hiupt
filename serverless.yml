@@ -1,7 +1,5 @@
 service: app
 # app and org for use with dashboard.serverless.com
-#app: hiupt
-#org: byunjuneseok
 
 # You can pin your service to only deploy with a specific Serverless version
 # Check out our docs for more details
@@ -24,8 +22,19 @@ provider:
         - dynamodb:UpdateItem
         - dynamodb:DeleteItem
       Resource: "arn:aws:dynamodb:*:*:*"
+
+    - Effect: Allow
+      Action:
+        - sqs:DeleteMessage
+        - sqs:ReceiveMessage
+      Resource: arn:aws:sqs:*:*:${self:custom.sqs}
+
   environment:
-    TABLE_NAME_USER: user-${opt:stage, self:provider.stage}
+    TABLE_NAME_USER: hiupt-user-${opt:stage, self:provider.stage}
+    TABLE_NAME_PETITION: hiupt-petition-${opt:stage, self:provider.stage}
+    TABLE_NAME_CONSENT: hiupt-consent-${opt:stage, self:provider.stage}
+
+    ACCESS_SECRET: aaaaaaaaa
 
 package:
   exclude:
@@ -38,13 +47,13 @@ package:
 
 functions:
   userCreate:
-    handler: bin/users/create
+    handler: bin/lambda/create
     events:
       - httpApi:
           path: /users/create
           method: post
   userRetrieve:
-    handler: bin/users/retrieve
+    handler: bin/lambda/retrieve
     events:
       - httpApi:
           path: /users/{id}
@@ -55,7 +64,7 @@ resources:
     userTable:
       Type: AWS::DynamoDB::Table
       Properties:
-        TableName: user-${opt:stage, self:provider.stage}
+        TableName: hiupt-user-${opt:stage, self:provider.stage}
         KeySchema:
           - AttributeName: id
             KeyType: HASH
@@ -65,6 +74,55 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
+    petitionTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: hiupt-petition-${opt:stage, self:provider.stage}
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+    consentTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: hiupt-consent-${opt:stage, self:provider.stage}
+        KeySchema:
+          - AttributeName: petitionId
+            KeyType: HASH
+          - AttributeName: userId
+            KeyType: RANGE
+        AttributeDefinitions:
+          - AttributeName: petitionId
+            AttributeType: S
+          - AttributeName: userId
+            AttributeType: S
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+
+    authChallengeEmailQueue:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: hiupt-auth-challenge-email-${opt:stage, self:provider.stage}
+        MessageRetentionPeriod: 1209600
+        VisibilityTimeout: 60
+        RedrivePolicy:
+          deadLetterTargetArn:
+            Fn::GetAtt:
+              - MessagesDeadLetterQueue
+              - Arn
+          maxReceiveCount: 10
+
+    authChallengeEmailDeadLetterQueue:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: hiupt-auth-challenge-email-dead-letter-${opt:stage, self:provider.stage}
+        MessageRetentionPeriod: 1209600
 
 plugins:
   - serverless-offline

@@ -1,14 +1,14 @@
 .PHONY: clean
 
-go_apps = users/create users/retrieve
+lambdas = lambda/userCreate lambda/userRetrieve
 
-users/% : src/users/%.go src/users/dao.go
-	GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o bin/$@ $< src/users/dao.go
+lambda/% : src/lambda/%.go
+	GOOS=linux GOARCH=amd64 go build -ldflags="-s -w" -o bin/$@ $<
 
 clean:
 	rm -rf ./bin
 
-build: $(go_apps)
+build: $(lambdas)
 
 #deploy: clean build
 #	sls deploy --verbose

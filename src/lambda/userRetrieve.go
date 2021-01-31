@@ -1,16 +1,18 @@
 package main
 
 import (
-	"encoding/json"
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 
 	"github.com/byunjuneseok/hiupt/src/log"
+	"github.com/byunjuneseok/hiupt/src/users"
+
+	"encoding/json"
 )
 
-func retrieveHandler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error)  {
+func userRetrieveHandler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error)  {
 	log.Logger(request.Body)
-	user, err := Retrieve(request.PathParameters["id"])
+	user, err := users.Retrieve(request.PathParameters["id"])
 	if err != nil {
 		return events.APIGatewayProxyResponse{Body: err.Error(), StatusCode: 500}, err
 	}
@@ -22,5 +24,5 @@ func retrieveHandler(request events.APIGatewayProxyRequest) (events.APIGatewayPr
 }
 
 func main()  {
-	lambda.Start(retrieveHandler)
+	lambda.Start(userRetrieveHandler)
 }

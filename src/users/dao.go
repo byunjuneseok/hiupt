@@ -1,19 +1,17 @@
-package main
+package users
 
 import (
-	"encoding/json"
-	"fmt"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/dynamodb"
 	"github.com/aws/aws-sdk-go/service/dynamodb/dynamodbattribute"
+
+
+	"encoding/json"
+	"fmt"
 	"os"
 )
 
-type User struct {
-	Id    string `json:"id"`
-	Email string `json:"email"`
-}
 
 func Retrieve(id string) (User, error) {
 	sess := session.Must(session.NewSession())
