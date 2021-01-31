@@ -4,9 +4,6 @@
 # golang output binary directory
 bin
 
-# golang vendor (dependencies) directory
-vendor
-
 # Binaries for programs and plugins
 *.exe
 *.exe~
@@ -26,3 +23,7 @@ go/
 
 .DS_Store
 /data/
+
+node_modules/
+
+package-lock.json
