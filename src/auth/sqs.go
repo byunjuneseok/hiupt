@@ -14,7 +14,7 @@ func AuthChallengeQueueGetUrl(sess *session.Session) (*sqs.GetQueueUrlOutput, er
 	svc := sqs.New(sess)
 
 	result, err := svc.GetQueueUrl(&sqs.GetQueueUrlInput{
-		QueueName: aws.String(os.Getenv("QUEUE_NAME_AUTH_CHALLENGE")),
+		QueueName: aws.String(os.Getenv("QUEUE_NAME_AUTH_CHALLENGE_EMAIL")),
 	})
 
 	if err != nil {

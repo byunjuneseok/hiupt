@@ -37,8 +37,9 @@ func challengeHandler(request events.APIGatewayProxyRequest) (events.APIGatewayP
 	if err != nil {
 		return events.APIGatewayProxyResponse{Body: err.Error(), StatusCode: 500}, err
 	}
+	queueUrl := result.QueueUrl
 
-	err = auth.AuthChallengeQueueSendMessage(sess, result.QueueUrl, thisUser, token)
+	err = auth.AuthChallengeQueueSendMessage(sess, queueUrl, thisUser, token)
 	if err != nil {
 		return events.APIGatewayProxyResponse{Body: err.Error(), StatusCode: 500}, err
 	}

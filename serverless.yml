@@ -22,18 +22,20 @@ provider:
         - dynamodb:UpdateItem
         - dynamodb:DeleteItem
       Resource: "arn:aws:dynamodb:*:*:*"
-
     - Effect: Allow
       Action:
+        - sqs:GetQueueUrl
         - sqs:DeleteMessage
         - sqs:ReceiveMessage
+        - sqs:SendMessage
       Resource: "arn:aws:sqs:*:*:*"
 
   environment:
     TABLE_NAME_USER: hiupt-user-${opt:stage, self:provider.stage}
     TABLE_NAME_PETITION: hiupt-petition-${opt:stage, self:provider.stage}
     TABLE_NAME_CONSENT: hiupt-consent-${opt:stage, self:provider.stage}
-
+    QUEUE_NAME_AUTH_CHALLENGE_EMAIL: hiupt-auth-challenge-email-${opt:stage, self:provider.stage}
+    QUEUE_NAME_AUTH_CHALLENGE_EMAIL_DEAD_LETTER: hiupt-auth-challenge-email-dead-letter-${opt:stage, self:provider.stage}
     ACCESS_SECRET: aaaaaaaaa
 
 package:
@@ -61,7 +63,7 @@ functions:
     handler: bin/lambda/auth/challenge
     events:
       - httpApi:
-          path: /auth/challenge/{id}
+          path: /auth/challenge
           method: post
 
 resources:
