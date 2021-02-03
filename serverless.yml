@@ -47,30 +47,79 @@ package:
     - ./bin/lambda/**
 
 functions:
+  # Users
   userRetrieve:
     handler: bin/lambda/users/retrieve
     events:
       - httpApi:
           path: /users/{hash_key}
           method: get
+
+  # Auth
   authSignUp:
     handler: bin/lambda/auth/signup
     events:
       - httpApi:
           path: /auth/signup
           method: post
+
   authSignIn:
     handler: bin/lambda/auth/signin
     events:
       - httpApi:
           path: /auth/signin
           method: post
+
   authChallenge:
     handler: bin/lambda/auth/challenge
     events:
       - httpApi:
           path: /auth/challenge
           method: post
+
+  # Petitions
+  petitionCreate:
+    handler: bin/lambda/petitions/create
+    events:
+      - httpApi:
+          path: /petitions/create
+          method: post
+
+  petitionList:
+    handler: bin/lambda/petitions/list
+    events:
+      - httpApi:
+          path: /petitions
+          method: get
+
+  petitionRetrieve:
+    handler: bin/lambda/petitions/retrieve
+    events:
+      - httpApi:
+          path: /petitions/{hash_key}
+          method: get
+
+  petitionDelete:
+    handler: bin/lambda/petitions/delete
+    events:
+      - httpApi:
+          path: /petitions/{hash_key}
+          method: delete
+
+  # Consents
+  consentsCreate:
+    handler: bin/lambda/consents/create
+    events:
+      - httpApi:
+          path: /petitions/{hash_key}/consents
+          method: post
+
+  consentsList:
+    handler: bin/lambda/consents/list
+    events:
+      - httpApi:
+          path: /petitions/{hash_key}/consents
+          method: get
 
 resources:
   Resources:
@@ -122,6 +171,7 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
 
+    # SQS
     authChallengeEmailQueue:
       Type: AWS::SQS::Queue
       Properties:
@@ -140,6 +190,10 @@ resources:
       Properties:
         QueueName: hiupt-auth-challenge-email-dead-letter-${opt:stage, self:provider.stage}
         MessageRetentionPeriod: 1209600
+
+    # SES
+
+    #
 
 plugins:
   - serverless-offline
