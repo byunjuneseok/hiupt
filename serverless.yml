@@ -51,7 +51,7 @@ functions:
     handler: bin/lambda/users/retrieve
     events:
       - httpApi:
-          path: /users/{student_id}
+          path: /users/{hash_key}
           method: get
   authSignUp:
     handler: bin/lambda/auth/signup
@@ -59,12 +59,12 @@ functions:
       - httpApi:
           path: /auth/signup
           method: post
-#  authSignIn:
-#    handler: bin/lambda/auth/signin
-#    events:
-#      - httpApi:
-#          path: /auth/signin
-#          method: post
+  authSignIn:
+    handler: bin/lambda/auth/signin
+    events:
+      - httpApi:
+          path: /auth/signin
+          method: post
   authChallenge:
     handler: bin/lambda/auth/challenge
     events:
