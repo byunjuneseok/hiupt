@@ -28,11 +28,11 @@ func AuthChallengeQueueSendMessage(sess *session.Session, queueUrl *string, user
 	var _, err = svc.SendMessage(&sqs.SendMessageInput{
 		DelaySeconds: aws.Int64(10),
 		MessageAttributes: map[string]*sqs.MessageAttributeValue{
-			"userId": &sqs.MessageAttributeValue{
+			"student_id": &sqs.MessageAttributeValue{
 				DataType:    aws.String("String"),
-				StringValue: aws.String(user.Id),
+				StringValue: aws.String(user.StudentId),
 			},
-			"userEmail": &sqs.MessageAttributeValue{
+			"user_email": &sqs.MessageAttributeValue{
 				DataType:    aws.String("String"),
 				StringValue: aws.String(user.Email),
 			},

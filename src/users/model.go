@@ -7,16 +7,16 @@ import (
 )
 
 type User struct {
-	Id        string `json:"id"`
+	HashKey   string `json:"hash_key"`
 	StudentId string `json:"student_id"`
 	Email     string `json:"email"`
 }
 
-func (user User) setId() error {
-	if user.Id != "" {
-		return errors.New("already has id")
+func (user *User) setId() error {
+	if user.HashKey != "" {
+		return errors.New("already has hash key")
 	}
-	user.Id = uuid.New().String()
+	user.HashKey = uuid.New().String()
 	return nil
 }
 

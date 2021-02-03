@@ -11,7 +11,7 @@ import (
 )
 
 
-func RetrieveByStudentId(id string) (User, error) {
+func RetrieveByHashKey(hashKey string) (User, error) {
 	sess := session.Must(session.NewSession())
 	svc := dynamodb.New(sess)
 	user := User{}
@@ -19,8 +19,8 @@ func RetrieveByStudentId(id string) (User, error) {
 	result, err := svc.GetItem(&dynamodb.GetItemInput{
 		TableName: aws.String(os.Getenv("TABLE_NAME_USER")),
 		Key: map[string]*dynamodb.AttributeValue{
-			"StudentId": {
-				S: aws.String(id),
+			"hash_key": {
+				S: aws.String(hashKey),
 			},
 		},
 	})

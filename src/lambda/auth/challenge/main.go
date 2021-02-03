@@ -15,16 +15,16 @@ func challengeHandler(request events.APIGatewayProxyRequest) (events.APIGatewayP
 	// before processing request, get userId.
 	var tmpUser users.User
 	_ = json.Unmarshal([]byte(request.Body), &tmpUser)
-	thisUserId := tmpUser.Id
+	thisUserStudentId := tmpUser.StudentId
 
 	// validate userId.
-	thisUser, err := users.RetrieveByStudentId(thisUserId)
+	thisUser, err := users.RetrieveByHashKey(thisUserStudentId)
 	if err != nil {
 		return events.APIGatewayProxyResponse{Body: err.Error(), StatusCode: 500}, err
 	}
 
 	// generate token.
-	token, err := auth.CreateToken(thisUserId)
+	token, err := auth.CreateToken(thisUserStudentId)
 	if err != nil {
 		return events.APIGatewayProxyResponse{Body: err.Error(), StatusCode: 500}, err
 	}

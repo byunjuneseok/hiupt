@@ -47,18 +47,24 @@ package:
     - ./bin/lambda/**
 
 functions:
-  userCreate:
-    handler: bin/lambda/users/create
-    events:
-      - httpApi:
-          path: /users/create
-          method: post
   userRetrieve:
     handler: bin/lambda/users/retrieve
     events:
       - httpApi:
-          path: /users/{id}
+          path: /users/{student_id}
           method: get
+  authSignUp:
+    handler: bin/lambda/auth/signup
+    events:
+      - httpApi:
+          path: /auth/signup
+          method: post
+#  authSignIn:
+#    handler: bin/lambda/auth/signin
+#    events:
+#      - httpApi:
+#          path: /auth/signin
+#          method: post
   authChallenge:
     handler: bin/lambda/auth/challenge
     events:
@@ -73,14 +79,14 @@ resources:
       Properties:
         TableName: hiupt-user-${opt:stage, self:provider.stage}
         KeySchema:
-          - AttributeName: id
+          - AttributeName: hash_key
             KeyType: HASH
-          - AttributeName: studentId
+          - AttributeName: student_id
             KeyType: RANGE
         AttributeDefinitions:
-          - AttributeName: id
+          - AttributeName: hash_key
             AttributeType: S
-          - AttributeName: studentId
+          - AttributeName: student_id
             AttributeType: S
         ProvisionedThroughput:
           ReadCapacityUnits: 1
@@ -90,10 +96,10 @@ resources:
       Properties:
         TableName: hiupt-petition-${opt:stage, self:provider.stage}
         KeySchema:
-          - AttributeName: id
+          - AttributeName: hash_key
             KeyType: HASH
         AttributeDefinitions:
-          - AttributeName: id
+          - AttributeName: hash_key
             AttributeType: S
         ProvisionedThroughput:
           ReadCapacityUnits: 1
@@ -103,14 +109,14 @@ resources:
       Properties:
         TableName: hiupt-consent-${opt:stage, self:provider.stage}
         KeySchema:
-          - AttributeName: petitionId
+          - AttributeName: petition_hash_key
             KeyType: HASH
-          - AttributeName: userId
+          - AttributeName: user_hash_key
             KeyType: RANGE
         AttributeDefinitions:
-          - AttributeName: petitionId
+          - AttributeName: petition_hash_key
             AttributeType: S
-          - AttributeName: userId
+          - AttributeName: user_hash_key
             AttributeType: S
         ProvisionedThroughput:
           ReadCapacityUnits: 1
