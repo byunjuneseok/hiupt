@@ -7,12 +7,12 @@ import (
 	"github.com/byunjuneseok/hiupt/src/log"
 )
 
-func loginHandler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+func signInHandler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	log.Logger(request.Body)
 
 	return events.APIGatewayProxyResponse{Body: "", StatusCode: 200}, nil
 }
 
 func main()  {
-	lambda.Start(loginHandler)
+	lambda.Start(signInHandler)
 }
